@@ -149,7 +149,7 @@ namespace infini
         IT_ASSERT(topo_sort() == true);
 
         // =================================== 作业 ===================================
-        // TODO：利用 allocator 给计算图分配内存
+        // FINISH：利用 allocator 给计算图分配内存
         // HINT: 获取分配好的内存指针后，可以调用 tensor 的 setDataBlob 函数给 tensor 绑定内存
         // =================================== 作业 ===================================
         std::vector<size_t> offsets;

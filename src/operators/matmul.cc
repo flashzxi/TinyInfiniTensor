@@ -27,7 +27,40 @@ namespace infini
         // TODO：返回经过 matmul 操作后的 shape
         // REF: https://github.com/onnx/onnx/blob/main/docs/Operators.md#gemm
         // =================================== 作业 ===================================
-        return std::nullopt;
+        Shape shapeA = inputs[0]->getDims();
+        Shape shapeB = inputs[1]->getDims();
+
+        if (shapeA.size() == 1) {
+            shapeA = {1, shapeA[0]};
+        }
+        if (shapeB.size() == 1) {
+            shapeB = {shapeB[0], 1};
+        }
+        if (transA) {
+            std::swap(shapeA[shapeA.size() - 1], shapeA[shapeA.size() - 2]);
+        }
+        if (transB) {
+            std::swap(shapeB[shapeB.size() - 1], shapeB[shapeB.size() - 2]);
+        }
+
+        int rankA = shapeA.size();
+        int rankB = shapeB.size();
+        int rankO = std::max(rankA, rankB);
+        Shape outputShape(rankO);
+        outputShape[outputShape.size() - 1] = shapeB[outputShape.size() - 1];
+        outputShape[outputShape.size() - 2] = shapeA[outputShape.size() - 2];
+        for (int i = 0; i < outputShape.size() - 2; i++) {
+            ShapeElem a = (i < rankA - 2) ? shapeA[rankA - 3 - i] : 1;
+            ShapeElem b = (i < rankB - 2) ? shapeB[rankB - 3 - i] : 1;
+
+            if (a != b && a != 1 && b != 1) {
+                throw Exception(
+                    "ONNX broadcast failed: incompatible dimensions"
+                );
+            }
+            outputShape[rankO - 3 - i] = std::max(a, b);
+        }
+        return {{outputShape}};
     }
 
 } // namespace infini

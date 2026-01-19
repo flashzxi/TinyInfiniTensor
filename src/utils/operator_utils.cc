@@ -6,7 +6,7 @@ namespace infini {
 Shape infer_broadcast(const Shape &A, const Shape &B) {
 
     // =================================== 作业 ===================================
-    // TODO：对 A 和 B 进行双向广播，返回广播后的形状。
+    // FINISH：对 A 和 B 进行双向广播，返回广播后的形状。
     // REF: https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
     // =================================== 作业 ===================================
     const size_t rankA = A.size();
