@@ -106,6 +106,11 @@ namespace infini
         // 1. 去除冗余的算子（例如，两个相邻的算子都是 transpose 算子，且做的是相反的操作，可以将其全部删除）
         // 2. 合并算子（例如，矩阵乘算子中含有属性transA、transB，如果其输入存在transpose，且对最后两个维度做交换，就可以将transpose融入到矩阵乘算子的属性中去）
         // =================================== 作业 ===================================
+
+        // 自顶向下递归优化
+        // 深度优先
+        std::unordered_set<OperatorObj *> flags;
+
     }
 
     Tensor GraphObj::getTensor(int fuid) const

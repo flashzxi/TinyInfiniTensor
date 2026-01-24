@@ -43,13 +43,13 @@ namespace infini
             std::swap(shapeB[shapeB.size() - 1], shapeB[shapeB.size() - 2]);
         }
 
-        int rankA = shapeA.size();
-        int rankB = shapeB.size();
-        int rankO = std::max(rankA, rankB);
+        size_t rankA = shapeA.size();
+        size_t rankB = shapeB.size();
+        size_t rankO = std::max(rankA, rankB);
         Shape outputShape(rankO);
         outputShape[outputShape.size() - 1] = shapeB[outputShape.size() - 1];
         outputShape[outputShape.size() - 2] = shapeA[outputShape.size() - 2];
-        for (int i = 0; i < outputShape.size() - 2; i++) {
+        for (size_t i = 0; i + 2 < outputShape.size(); i++) {
             ShapeElem a = (i < rankA - 2) ? shapeA[rankA - 3 - i] : 1;
             ShapeElem b = (i < rankB - 2) ? shapeB[rankB - 3 - i] : 1;
 

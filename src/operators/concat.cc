@@ -11,7 +11,6 @@ ConcatObj::ConcatObj(GraphObj *graph, TensorVec inputs, Tensor output, int _dim)
 
 optional<vector<Shape>> ConcatObj::inferShape(const TensorVec &inputs) {
     Shape dims = inputs[0]->getDims();
-    auto rank = inputs[0]->getRank();
 
     // =================================== 作业 ===================================
     // FINISH：修改 dims，返回正确的 concat 后的 shape
@@ -19,10 +18,10 @@ optional<vector<Shape>> ConcatObj::inferShape(const TensorVec &inputs) {
     // =================================== 作业 ===================================
 
     int64_t new_dim = 0;
-    for (int i = 0; i < inputs.size(); i++) {
-        new_dim += inputs[i]->getDims()[dim];
+    for (const auto & input : inputs) {
+        new_dim += input->getDims()[dim];
     }
-    dims[dim] = new_dim;
+    dims[dim] = static_cast<int>(new_dim);
     return {{dims}};
 }
 

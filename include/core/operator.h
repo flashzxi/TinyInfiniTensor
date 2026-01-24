@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "core/op_type.h"
 #include "core/tensor.h"
 
@@ -35,6 +37,7 @@ namespace infini
     public: // getter and setter
         const TensorVec &getInputs() const { return inputs; }
         const TensorVec &getOutputs() const { return outputs; }
+        void resetInput(size_t idx, Tensor newInput) { inputs[idx] = std::move(newInput); }
         Tensor getInputs(size_t i) const { return inputs.at(i); }
         Tensor getOutput() const
         {
@@ -69,7 +72,7 @@ namespace infini
         optional<vector<Shape>> inferShape();
         vector<DataType> inferDataType() const;
 
-    private:
+    public:
         void addPredecessors(const Operator &op) { predecessors.emplace_back(op); }
         void addSuccessors(const Operator &op) { successors.emplace_back(op); }
         void removePredecessors(const Operator &op);

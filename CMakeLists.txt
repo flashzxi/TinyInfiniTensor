@@ -64,7 +64,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -UNDEBUG")
 
 
 # Source files
-file(GLOB_RECURSE SRC src/core/*.cc src/kernels/cpu/*.cc src/operators/*.cc src/utils/*.cc)
+file(GLOB_RECURSE SRC src/core/*.cc src/kernels/cpu/*.cc src/operators/*.cc src/utils/*.cc src/optimizer/*.cc)
 
 if(USE_INTELCPU)
   file(GLOB_RECURSE SRC_INTELCPU src/intelcpu/*.cc src/kernels/intelcpu/*.cc )
