@@ -74,11 +74,20 @@ public:
         register_rules.insert({pattern, reWriter});
         return true;
     }
+
+    void optimize(Operator op, Graph graph) {
+        for (auto& pair: register_rules) {
+            if (pair.first->match(op)) {
+                pair.second->rewrite(op, graph);
+            }
+        }
+    }
 private:
     std::multimap<Ref<Pattern>, Ref<ReWriter>, PointerCmp<Pattern>> register_rules;
 };
 }
 
 #define REGISTER_RULE(pattern, rewriter)                                                        \
-    static const bool _SELECT(_register_rule_, __COUNTER__) =                                      \
-        Rules::getInstance().register_rule(make_ref<pattern>(), make_ref<rewriter>());          \
+    static const bool _SELECT(_register_rule_, __COUNTER__) =                                   \
+        Rules::getInstance().register_rule(make_ref<pattern>(), make_ref<rewriter>());
+

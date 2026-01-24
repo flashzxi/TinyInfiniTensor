@@ -8,7 +8,7 @@
 namespace infini
 {
 
-    class GraphObj : public Object
+    class GraphObj : public Object, public std::enable_shared_from_this<GraphObj>
     {
     protected:
         Runtime runtime;
@@ -52,6 +52,8 @@ namespace infini
         bool topo_sort();
 
         void optimize();
+
+        void optimize_helper(const Operator& root, std::unordered_set<OperatorObj *>& seen);
 
         void shape_infer();
 

@@ -49,6 +49,7 @@ namespace infini
             IT_ASSERT(i < outputs.size(), "Index exceeded");
             return outputs.at(i);
         }
+        // 不要依赖这个玩意的
         OpVec getPredecessors() const { return wrefs_to_refs(predecessors); }
         OpVec getSuccessors() const { return wrefs_to_refs(successors); }
         OpType getOpType() const { return type; }

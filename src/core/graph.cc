@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <numeric>
 #include <queue>
+#include <stack>
+#include "optimizer/rules.h"
 
 namespace infini
 {
@@ -98,6 +100,18 @@ namespace infini
         return this->sorted = true;
     }
 
+    void GraphObj::optimize_helper(const Operator& root, std::unordered_set<OperatorObj *>& seen) {
+        for (const auto& it: root->getPredecessors()) {
+            if (seen.count(it.get()) == 0) {
+                optimize_helper(it, seen);
+            }
+        }
+        if (seen.count(root.get()) == 0) {
+            Rules::getInstance().optimize(root, shared_from_this());
+        }
+        seen.insert(root.get());
+    }
+
     void GraphObj::optimize()
     {
         // =================================== 作业 ===================================
@@ -106,11 +120,20 @@ namespace infini
         // 1. 去除冗余的算子（例如，两个相邻的算子都是 transpose 算子，且做的是相反的操作，可以将其全部删除）
         // 2. 合并算子（例如，矩阵乘算子中含有属性transA、transB，如果其输入存在transpose，且对最后两个维度做交换，就可以将transpose融入到矩阵乘算子的属性中去）
         // =================================== 作业 ===================================
-
+        topo_sort();
         // 自顶向下递归优化
         // 深度优先
-        std::unordered_set<OperatorObj *> flags;
-
+        std::unordered_set<OperatorObj *> seen;
+        OpVec opsCpy =  ops;
+        auto headOpIter = opsCpy.rbegin();
+        while (headOpIter != opsCpy.rend()) {
+            if (seen.count(headOpIter->get()) != 0) {
+                ++headOpIter;
+                continue;
+            }
+            optimize_helper(*headOpIter, seen);
+            ++headOpIter;
+        }
     }
 
     Tensor GraphObj::getTensor(int fuid) const
