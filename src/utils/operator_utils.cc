@@ -6,11 +6,27 @@ namespace infini {
 Shape infer_broadcast(const Shape &A, const Shape &B) {
 
     // =================================== 作业 ===================================
-    // TODO：对 A 和 B 进行双向广播，返回广播后的形状。
+    // FINISH：对 A 和 B 进行双向广播，返回广播后的形状。
     // REF: https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
     // =================================== 作业 ===================================
-    
-    return {};
+    const size_t rankA = A.size();
+    const size_t rankB = B.size();
+    const size_t rank = std::max(rankA, rankB);
+
+    Shape out(rank);
+
+    for (size_t i = 0; i < rank; ++i) {
+        ShapeElem a = (i < rankA) ? A[rankA - 1 - i] : 1;
+        ShapeElem b = (i < rankB) ? B[rankB - 1 - i] : 1;
+
+        if (a != b && a != 1 && b != 1) {
+            throw Exception(
+                "ONNX broadcast failed: incompatible dimensions"
+            );
+        }
+        out[rank - 1 - i] = std::max(a, b);
+    }
+    return out;
 }
 
 int get_real_axis(const int &axis, const int &rank) {

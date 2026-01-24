@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <map>
 #include <unordered_set>
+#include <queue>
 
 namespace infini {
   class Allocator
@@ -24,10 +25,12 @@ namespace infini {
     void *ptr;
 
     // =================================== 作业 ===================================
-    // TODO：可能需要设计一个数据结构来存储free block，以便于管理和合并
+    // ：可能需要设计一个数据结构来存储free block，以便于管理和合并
     // HINT: 可以使用一个 map 来存储 free block，key 为 block 的起始/结尾地址，value 为 block 的大小
     // =================================== 作业 ===================================
+    std::vector<std::pair<size_t, size_t>> free_blocks;
 
+    std::multiset<size_t> free_block_sizes;
   public:
     Allocator(Runtime runtime);
 

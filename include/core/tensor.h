@@ -146,7 +146,7 @@ namespace infini
             }
             return true;
         }
-
+    public:
         void addTarget(const Operator &op) { targets.emplace_back(op); }
         void setSource(const Operator &op) { source = op; }
         void removeTarget(const Operator &op)
